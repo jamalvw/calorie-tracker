@@ -24,3 +24,66 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+button {
+  background-color: #111;
+  padding: 10px 24px;
+}
+
+button:disabled {
+  background-color: #030303;
+  color: lightgray;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #171717;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #111;
+  color: #ededed;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.error {
+  color: red;
+}
+
+.signin-form, .signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2rem;
+  max-width: 380px;
+}
