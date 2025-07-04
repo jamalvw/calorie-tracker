@@ -13,7 +13,6 @@ export const calculateBMR = (sex: Sex, weight: number, height: number, age: numb
     }
 }
 
-// Harris-Benedict Equation
 export const calculateTDEE = (bmr: number, activityLevel: ActivityLevel): number => {
     switch (activityLevel) {
     case ActivityLevel.SEDENTARY:
