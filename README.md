@@ -13,3 +13,10 @@
 - /flow/signin
 - /flow/signup
 - /flow/signout
+
+## Features
+
+|      | Test |
+| ---- | ---- |
+| ✅ | Manual Food Entry | 
+---------------

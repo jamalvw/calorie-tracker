@@ -21,13 +21,30 @@ model User {
   email          String @unique
   hashedPassword String
 
-  meals          Meal[]
-  goals          Goal[]
+  age            Int?
+  sex            String?
+  weight         Float?
+  height         Float?
+  activityLevel  ActivityLevel?
+  goal           Goal?
+
   sessions       Session[]
 
   createdAt DateTime @default(now())
+}
 
-  
+enum ActivityLevel {
+  SEDENTARY
+  LIGHT
+  MODERATE
+  HIGH
+}
+
+enum Goal {
+  GAIN_MUSCLE
+  MAINTAIN_WEIGHT
+  LOSE_WEIGHT
+  OTHER
 }
 
 model Session {
@@ -38,30 +55,3 @@ model Session {
   expiresAt DateTime
 }
 
-model Meal {
-  id        Int    @id @unique @default(autoincrement())
-  userId    Int
-  user      User   @relation(fields: [userId], references: [id])
-
-  name      String
-  calories  Int
-
-  createdAt DateTime @default(now())
-}
-
-model Goal {
-  id          Int    @id @unique @default(autoincrement())
-  userId      Int
-  user        User   @relation(fields: [userId], references: [id])
-
-  type        GoalType
-  targetValue Float
-  unit        String
-
-  createdAt   DateTime @default(now())
-}
-
-enum GoalType {
-  WEIGHT
-  CALORIES
-}
