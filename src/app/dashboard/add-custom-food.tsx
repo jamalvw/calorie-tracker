@@ -1,4 +1,4 @@
-import { ServingUnit } from '@/generated/prisma'
+
 import styles from './dashboard.module.css'
 import { useState } from 'react'
 import { CreateCustomFoodRequest, CreateCustomFoodResponse, ErrorCode } from '@/utils/types'
@@ -8,7 +8,8 @@ export default function AddCustomFood({ closeModal }: { closeModal: () => void }
     const [name, setName] = useState<string>('')
     const [brand, setBrand] = useState<string>('')
     const [servingSize, setServingSize] = useState<number>(0)
-    const [servingUnit, setServingUnit] = useState<ServingUnit>(ServingUnit.G)
+    const [servingUnit, setServingUnit] = useState<string>('')
+    const [customServingUnit, setCustomServingUnit] = useState<string>('')
     const [calories, setCalories] = useState<number>(0)
     const [protein, setProtein] = useState<number>(0)
     const [carbs, setCarbs] = useState<number>(0)
@@ -19,7 +20,7 @@ export default function AddCustomFood({ closeModal }: { closeModal: () => void }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const request: CreateCustomFoodRequest = { name, brand, servingSize, servingUnit, calories, protein, carbs, fat, fiber }
+        const request: CreateCustomFoodRequest = { name, brand, servingSize, servingUnit: servingUnit == 'CUSTOM' ? customServingUnit : servingUnit, calories, protein, carbs, fat, fiber }
         const response = await createCustomFood(request) as CreateCustomFoodResponse
 
         if (!response || response.error) {
@@ -51,11 +52,17 @@ export default function AddCustomFood({ closeModal }: { closeModal: () => void }
                         <label htmlFor='servingSize'>Serving Size</label>
                         <input type='number' placeholder='Serving Size' value={servingSize} onChange={(e) => setServingSize(Number(e.target.value))} />
                         <label htmlFor='servingUnit'>Serving Unit</label>
-                        <select id='servingUnit' value={servingUnit} onChange={(e) => setServingUnit(e.target.value as ServingUnit)} required>
-                            {Object.values(ServingUnit).map((unit) => (
-                                <option key={unit} value={unit}>{unit}</option>
-                            ))}
+                        <select id='servingUnit' value={servingUnit} onChange={(e) => setServingUnit(e.target.value)} required>
+                            <option value=''>Select a unit</option>
+                            <option value='G'>G</option>
+                            <option value='ML'>ML</option>
+                            <option value='OZ'>OZ</option>
+                            <option value='LB'>LB</option>
+                            <option value='KG'>KG</option>
+                            <option value='MG'>MG</option>
+                            <option value='CUSTOM'>Custom</option>
                         </select>
+                        {servingUnit == 'CUSTOM' && <input type='text' placeholder='Custom Serving Unit' value={customServingUnit} onChange={(e) => setCustomServingUnit(e.target.value)} required />}
                     </div>
                     <div className='form-group'>
                         <label htmlFor='calories'>Calories</label>

@@ -37,8 +37,8 @@ export async function GET(req: NextRequest): Promise<NextResponse<NutritionixSea
         .then(foods => foods.map(food => ({
             food_name: food.name,
             brand_name: food.brand,
-            serving_qty: 1,
-            serving_unit: 'g',
+            serving_qty: food.servingSize || 1,
+            serving_unit: food.servingUnit || 'unit',
             nf_calories: food.calories || 0,
             nf_protein: food.protein || 0,
             nf_total_carbohydrate: food.carbs || 0,
