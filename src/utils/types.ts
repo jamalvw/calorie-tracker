@@ -65,3 +65,22 @@ export interface GetCurrentUserResponse extends APIResponse {
     session: Session,
     user: User
 }
+
+/*
+ * Update User
+ */
+export interface UpdateUserRequest extends APIRequest {
+    id: string
+    name?: string
+    email?: string
+    age?: number
+    sex?: Sex
+    weight?: number
+    height?: number
+    activityLevel?: ActivityLevel
+    goal?: Goal
+}
+
+export interface UpdateUserResponse extends APIResponse {
+    user: User
+}

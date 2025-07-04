@@ -31,7 +31,7 @@ export default function SignUp() {
         const response = await signUp(request) as SignUpResponse
 
         if (!response || response.error) {
-            switch (response.error?.code) {
+            switch (response?.error?.code) {
             case ErrorCode.MISSING_REQUIRED_FIELDS:
                 return setError('Missing required fields')
             case ErrorCode.EMAIL_IN_USE:

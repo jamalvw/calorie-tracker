@@ -16,6 +16,9 @@ export default function Dashboard() {
     useEffect(() => {
         (async () => {
             const response = await getCurrentUser()
+
+            if (!response) return
+
             setUser(response.user)
 
             setBMR(calculateBMR(response.user.sex!, response.user.weight!, response.user.height!, response.user.age!))
