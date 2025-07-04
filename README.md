@@ -10,4 +10,6 @@
 - home
 - /dashboard
 - /account
-- /account/login
+- /flow/signin
+- /flow/signup
+- /flow/signout

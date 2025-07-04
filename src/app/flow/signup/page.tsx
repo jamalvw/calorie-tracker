@@ -1,5 +1,5 @@
 'use client'
-import { signIn, signUp } from '../../../utils/api'
+import { signUp } from '../../../utils/api'
 import { ErrorCode, SignUpRequest, SignUpResponse } from '../../../utils/types'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -56,7 +56,7 @@ export default function SignUp() {
                 </div>
                 {error && <p className="error">{error}</p>}
                 <button type="submit">Sign Up</button>
-                <p>Already have an account? <Link href="/account/signin">Sign In</Link></p>
+                <p>Already have an account? <Link href="/flow/signin">Sign In</Link></p>
             </form>
         </div>
     )

@@ -1,58 +1,52 @@
-import { APIResponse, SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from './types'
+import { GetSessionResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse } from './types'
 
-const endpoint = '/api/users'
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
-// TODO: Replace all generic APIResponse promises with typed responses
-
-export async function getUser(id: number): Promise<APIResponse> {
-    const res = await fetch(`${endpoint}?id=${id}`)
-    return res.json()
-}
-
-export async function getAllUsers(): Promise<APIResponse> {
-    const res = await fetch(`${endpoint}`)
-    return res.json()
-}
-
-export async function deleteUser(id: number): Promise<APIResponse> {
-    const res = await fetch(`${endpoint}?id=${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
-    })
-    return res.json()
-}
-
-export async function deleteAllUsers(): Promise<APIResponse> {
-    const res = await fetch(`${endpoint}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
-    })
-    return res.json()
-}
-
-export async function createUser(data: { name: string, email: string, password: string }): Promise<APIResponse> {
-    const res = await fetch(`${endpoint}`, {
-        method: 'POST',
+/*
+ * Get Session
+ */
+export async function getSession(): Promise<GetSessionResponse> {
+    const res = await fetch(`${baseUrl}/api/auth/session`, {
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        credentials: 'include',
     })
-    return res.json().then((data) => data.user)
+    return res.json()
 }
 
+/*
+ * Sign In
+ */
 export async function signIn(data: SignInRequest): Promise<SignInResponse> {
-    const res = await fetch('/api/account/signin', {
+    const res = await fetch(`${baseUrl}/api/auth/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(data)
     })
     return res.json()
 }
 
+/*
+ * Sign Up
+ */
 export async function signUp(data: SignUpRequest): Promise<SignUpResponse> {
-    const res = await fetch('/api/account/signup', {
+    const res = await fetch(`${baseUrl}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(data)
+    })
+    return res.json()
+}
+
+/*
+ * Sign Out
+ */
+export async function signOut(): Promise<SignOutResponse> {
+    const res = await fetch(`${baseUrl}/api/auth/signout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
     })
     return res.json()
 }

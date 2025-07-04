@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link'
 
 export default function MainNavbar() {
     return (
@@ -7,7 +7,7 @@ export default function MainNavbar() {
                 <Link href="/"><h1>Calorie Tracker</h1></Link>
             </div>
             <div className="navbar-right">
-                <Link href="/account/signin">Sign In / Sign Up</Link>
+                <Link href="/flow/signin">Sign In / Sign Up</Link>
             </div>
         </div>
     )

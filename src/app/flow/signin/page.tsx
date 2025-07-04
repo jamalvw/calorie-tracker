@@ -50,8 +50,8 @@ export default function SignIn() {
                 </div>
                 {error && <p className="error">{error}</p>}
                 <button type="submit">Sign In</button>
-                <p>Don&apos;t have an account? <Link href="/account/signup">Sign Up</Link></p>
-                <p>Forgot your password? <Link href="/account/reset-password">Reset Password</Link></p>
+                <p>Don&apos;t have an account? <Link href="/flow/signup">Sign Up</Link></p>
+                <p>Forgot your password? <Link href="/flow/reset-password">Reset Password</Link></p>
             </form>
         </div>
     )
