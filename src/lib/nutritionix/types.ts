@@ -36,6 +36,7 @@ export interface NutritionixFood {
     tag_id: string,
     tag_name: string,
     locale: string,
+    local: boolean,
 }
 
 export interface NutritionixNutrient {

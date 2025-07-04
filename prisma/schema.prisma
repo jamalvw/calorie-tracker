@@ -60,3 +60,27 @@ model Session {
   expiresAt DateTime
 }
 
+enum ServingUnit {
+  G
+  ML
+  OZ
+  LB
+  KG
+  MG
+  MCG
+  IU
+}
+
+model Food {
+  id          String   @id @unique @default(uuid())
+  name        String
+  brand       String?
+  servingSize Float?
+  servingUnit ServingUnit?
+  calories    Float?
+  protein     Float?
+  carbs       Float?
+  fat         Float?
+  fiber       Float?
+  createdAt   DateTime @default(now())
+}

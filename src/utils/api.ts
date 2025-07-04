@@ -1,4 +1,4 @@
-import { GetCurrentUserResponse, NutritionixNutrientsResponse, NutritionixNutrientsRequest, NutritionixSearchRequest, NutritionixSearchResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse, UpdateUserRequest, UpdateUserResponse } from './types'
+import { GetCurrentUserResponse, NutritionixNutrientsResponse, NutritionixNutrientsRequest, NutritionixSearchRequest, NutritionixSearchResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse, UpdateUserRequest, UpdateUserResponse, CreateCustomFoodRequest, CreateCustomFoodResponse } from './types'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
@@ -66,6 +66,20 @@ export async function updateUser(data: UpdateUserRequest): Promise<UpdateUserRes
         body: JSON.stringify(data)
     })
 
+    try { return await res.json() } catch { return null }
+}
+
+/*
+ * Create Custom Food
+ */
+export async function createCustomFood(data: CreateCustomFoodRequest): Promise<CreateCustomFoodResponse | null> {
+    const res = await fetch(`${baseUrl}/api/protected/foods`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    })
+    
     try { return await res.json() } catch { return null }
 }
 
