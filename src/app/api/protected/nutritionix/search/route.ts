@@ -1,3 +1,5 @@
+import { NutritionixFood } from '@/lib/nutritionix/types'
+import prisma from '@/lib/prisma'
 import { NutritionixSearchResponse, ErrorCode } from '@/utils/types'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -31,5 +33,19 @@ export async function GET(req: NextRequest): Promise<NextResponse<NutritionixSea
 
     const data = await res.json()
 
-    return NextResponse.json({ branded: data.branded, common: data.common } as NutritionixSearchResponse)
+    data.local = await prisma.food.findMany({ where: { name: { contains: query, mode: 'insensitive' } } })
+        .then(foods => foods.map(food => ({
+            food_name: food.name,
+            brand_name: food.brand,
+            serving_qty: food.servingSize || 1,
+            serving_unit: food.servingUnit || 'unit',
+            nf_calories: food.calories || 0,
+            nf_protein: food.protein || 0,
+            nf_total_carbohydrate: food.carbs || 0,
+            nf_total_fat: food.fat || 0,
+            nf_dietary_fiber: food.fiber || 0,
+            local: true,
+        }) as NutritionixFood))
+
+    return NextResponse.json(data as NutritionixSearchResponse)
 }

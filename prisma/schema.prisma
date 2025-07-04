@@ -60,3 +60,16 @@ model Session {
   expiresAt DateTime
 }
 
+model Food {
+  id          String   @id @unique @default(uuid())
+  name        String
+  brand       String?
+  servingSize Float?
+  servingUnit String?
+  calories    Float?
+  protein     Float?
+  carbs       Float?
+  fat         Float?
+  fiber       Float?
+  createdAt   DateTime @default(now())
+}

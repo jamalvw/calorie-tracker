@@ -1,4 +1,4 @@
-import { Goal, ActivityLevel, Session, User, Sex } from '@/generated/prisma'
+import { Goal, ActivityLevel, Session, User, Sex, ServingUnit, Food } from '@/generated/prisma'
 import { NutritionixFood } from '@/lib/nutritionix/types'
 
 export enum ErrorCode {
@@ -88,6 +88,25 @@ export interface UpdateUserResponse extends APIResponse {
 }
 
 /*
+ * Create Custom Food
+ */
+export interface CreateCustomFoodRequest extends APIRequest {
+    name: string
+    brand: string
+    servingSize: number
+    servingUnit: ServingUnit
+    calories: number
+    protein: number
+    carbs: number
+    fat: number
+    fiber: number
+}
+
+export interface CreateCustomFoodResponse extends APIResponse {
+    food: Food
+}
+
+/*
  * Search with Nutritionix
  */
 export interface NutritionixSearchRequest extends APIRequest {
@@ -110,6 +129,7 @@ export interface NutritionixSearchRequest extends APIRequest {
 export interface NutritionixSearchResponse extends APIResponse {
     branded?: NutritionixFood[]
     common?: NutritionixFood[]
+    local?: NutritionixFood[]
 }
 
 /*
