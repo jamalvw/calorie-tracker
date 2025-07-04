@@ -22,7 +22,7 @@ export default function SignIn() {
         const response = await signIn(request) as SignInResponse
 
         if (!response || response.error) {
-            switch (response.error?.code) {
+            switch (response?.error?.code) {
             case ErrorCode.INVALID_CREDENTIALS:
                 return setError('Invalid email or password')
             default:

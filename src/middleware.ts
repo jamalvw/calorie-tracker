@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/flow/signin', req.url))
     }
 
-    const response = await fetch(`${baseUrl}/api/auth/session`, {
+    const response = await fetch(`${baseUrl}/api/auth/current-user`, {
         headers: { 
             'Content-Type': 'application/json',
             'Cookie': req.headers.get('cookie') || ''

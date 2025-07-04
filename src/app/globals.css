@@ -42,11 +42,23 @@ button {
 button:disabled {
   background-color: #030303;
   color: lightgray;
+  pointer-events: none;
 }
 
 button:hover {
   cursor: pointer;
   background-color: #171717;
+}
+
+input, select {
+  background-color: #111;
+  padding: 10px 24px;
+}
+
+input:disabled, select:disabled {
+  background-color: #030303;
+  color: lightgray;
+  pointer-events: none;
 }
 
 .navbar {
