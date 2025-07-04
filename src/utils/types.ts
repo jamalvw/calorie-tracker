@@ -111,3 +111,25 @@ export interface NutritionixSearchResponse extends APIResponse {
     branded?: NutritionixFood[]
     common?: NutritionixFood[]
 }
+
+/*
+ * Get Nutrients from Nutritionix
+ */
+export interface NutritionixNutrientsRequest extends APIRequest {
+    query: string,
+    num_servings?: number,
+    aggregate?: string,
+    line_delimited?: boolean,
+    use_raw_foods?: boolean,
+    include_subrecipe?: boolean,
+    timezone?: string,
+    consumed_at?: string,
+    use_branded_foods?: boolean,
+    taxonomy?: boolean,
+    ingredient_statement?: boolean,
+    last_modified?: boolean,
+}
+
+export interface NutritionixNutrientsResponse extends APIResponse {
+    foods: NutritionixFood[]
+}

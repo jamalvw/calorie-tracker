@@ -1,4 +1,4 @@
-import { GetCurrentUserResponse, NutritionixSearchRequest, NutritionixSearchResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse, UpdateUserRequest, UpdateUserResponse } from './types'
+import { GetCurrentUserResponse, NutritionixNutrientsResponse, NutritionixNutrientsRequest, NutritionixSearchRequest, NutritionixSearchResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse, UpdateUserRequest, UpdateUserResponse } from './types'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
@@ -83,6 +83,20 @@ export async function nutritionixSearch(data: NutritionixSearchRequest): Promise
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
+    })
+
+    try { return await res.json() } catch { return null }
+}
+
+/*
+ * Get Nutrients from Nutritionix
+ */
+export async function nutritionixNutrients(data: NutritionixNutrientsRequest): Promise<NutritionixNutrientsResponse | null> {
+    const res = await fetch(`${baseUrl}/api/protected/nutritionix/nutrients`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
     })
 
     try { return await res.json() } catch { return null }
