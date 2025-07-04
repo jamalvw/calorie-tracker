@@ -67,8 +67,8 @@ export async function getCurrentUser(): Promise<GetCurrentUserResponse | null> {
  * Update User
  */
 export async function updateUser(data: UpdateUserRequest): Promise<UpdateUserResponse | null> {
-    const res = await fetch(`${baseUrl}/api/auth/update-user`, {
-        method: 'POST',
+    const res = await fetch(`${baseUrl}/api/protected/users`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(data)

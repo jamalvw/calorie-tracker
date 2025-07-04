@@ -3,6 +3,7 @@ import { Goal, ActivityLevel, Session, User, Sex } from '@/generated/prisma'
 export enum ErrorCode {
     INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
     EMAIL_IN_USE = 'EMAIL_IN_USE',
+    MISSING_ID = 'MISSING_ID',
     MISSING_REQUIRED_FIELDS = 'MISSING_REQUIRED_FIELDS',
     INVALID_SESSION = 'INVALID_SESSION',
     EXPIRED_SESSION = 'EXPIRED_SESSION',

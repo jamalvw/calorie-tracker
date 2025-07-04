@@ -60,7 +60,7 @@ export default function Account() {
 
         setIsSaving(false)
 
-        if (!response || response.error) {            
+        if (!response || response.error) {     
             switch (response?.error?.code) {
             case ErrorCode.MISSING_REQUIRED_FIELDS:
                 return setError('Please fill in all fields')
@@ -71,6 +71,7 @@ export default function Account() {
             }
         }
 
+        setUser(response.user)
         setIsEditing(false)
         setError('')
     }
