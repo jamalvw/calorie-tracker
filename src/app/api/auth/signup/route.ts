@@ -9,9 +9,13 @@ import { NextRequest, NextResponse } from 'next/server'
     Returns: SignUpResponse
 */
 export async function POST(req: NextRequest): Promise<NextResponse<SignUpResponse>> {
-    const { name, email, password }: SignUpRequest = await req.json()
+    // TODO: some of these are not required for signup, move to post-signup flow
+    // TODO: input validation
+    const { name, email, password, age, sex, weight, height, activityLevel, goal }: SignUpRequest = await req.json()
 
-    if (!name || !email || !password) {
+    console.log(name, email, password, age, sex, weight, height, activityLevel, goal)
+
+    if (!name || !email || !password || !age || !sex || !weight || !height || !activityLevel || !goal) {
         return NextResponse.json({ error: { code: ErrorCode.MISSING_REQUIRED_FIELDS } } as SignUpResponse, { status: 400 })
     }
 
@@ -22,7 +26,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<SignUpRespons
     }
 
     const user = await prisma.user.create({
-        data: { name, email, hashedPassword: await bcrypt.hash(password, 10) }
+        data: { name, email, hashedPassword: await bcrypt.hash(password, 10), age, sex, weight, height, activityLevel, goal }
     })
 
     const session = await prisma.session.create({

@@ -17,7 +17,14 @@ export default function Dashboard() {
             <DashboardNavbar />
             {user && <div className='dashboard'>
                 <div className='dashboard-header'>
-                    <h1>Hi, {user.name}</h1>
+                    <h1>Hi, {user.name}!</h1>
+                    <p>Email: {user.email}</p>
+                    <p>Age: {user.age}</p>
+                    <p>Sex: {user.sex}</p>
+                    <p>Weight: {user.weight}</p>
+                    <p>Height: {user.height}</p>
+                    <p>Activity Level: {user.activityLevel}</p>
+                    <p>Goal: {user.goal}</p>
                 </div>
                 <div className='dashboard-content'>
                 </div>

@@ -1,4 +1,4 @@
-import { Session, User } from '@/generated/prisma'
+import { Goal, ActivityLevel, Session, User } from '@/generated/prisma'
 
 export enum ErrorCode {
     INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
@@ -38,6 +38,14 @@ export interface SignUpRequest extends APIRequest {
     name: string
     email: string
     password: string
+
+    // TODO: some of these are not required for signup, move to post-signup flow
+    age: number
+    sex: string
+    weight: number
+    height: number
+    activityLevel: ActivityLevel
+    goal: Goal
 }
 
 export interface SignUpResponse extends APIResponse {
