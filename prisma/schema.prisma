@@ -22,7 +22,7 @@ model User {
   hashedPassword String
 
   age            Int?
-  sex            String?
+  sex            Sex?
   weight         Float?
   height         Float?
   activityLevel  ActivityLevel?
@@ -31,6 +31,11 @@ model User {
   sessions       Session[]
 
   createdAt DateTime @default(now())
+}
+
+enum Sex {
+  MALE
+  FEMALE
 }
 
 enum ActivityLevel {

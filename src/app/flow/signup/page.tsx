@@ -1,5 +1,5 @@
 'use client'
-import { ActivityLevel, Goal } from '@/generated/prisma'
+import { ActivityLevel, Goal, Sex } from '@/generated/prisma'
 import { signUp } from '../../../utils/api'
 import { ErrorCode, SignUpRequest, SignUpResponse } from '../../../utils/types'
 import Link from 'next/link'
@@ -15,7 +15,7 @@ export default function SignUp() {
 
     // TODO: some of these are not required for signup, move to post-signup flow
     const [age, setAge] = useState<number>(0)
-    const [sex, setSex] = useState<string>('male')
+    const [sex, setSex] = useState<Sex>(Sex.MALE)
     const [weight, setWeight] = useState<number>(0)
     const [height, setHeight] = useState<number>(0)
     const [activityLevel, setActivityLevel] = useState<ActivityLevel>(ActivityLevel.SEDENTARY)
@@ -67,10 +67,9 @@ export default function SignUp() {
                 </div>
                 <div className="form-group">
                     <label htmlFor="sex">Sex</label>
-                    <select value={sex} onChange={(e) => setSex(e.target.value)} required>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                    <select value={sex} onChange={(e) => setSex(e.target.value as Sex)} required>
+                        <option value={Sex.MALE}>Male</option>
+                        <option value={Sex.FEMALE}>Female</option>
                     </select>
                 </div>
                 <div className="form-group">
