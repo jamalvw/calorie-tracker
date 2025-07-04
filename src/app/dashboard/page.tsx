@@ -2,18 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import DashboardNavbar from '../_components/DashboardNavbar'
-import { getSession } from '@/utils/api'
-import { GetSessionResponse } from '@/utils/types'
 import { User } from '@/generated/prisma'
+import { getCurrentUser } from '@/utils/api'
 
 export default function Dashboard() {
     const [user, setUser] = useState<User | null>(null)
 
     useEffect(() => {
-        (async () => {
-            const response = await getSession() as GetSessionResponse
-            setUser(response.user)
-        })()
+        getCurrentUser().then(response => setUser(response.user))
     }, [])
 
     return (

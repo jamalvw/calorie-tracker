@@ -20,14 +20,6 @@ export interface APIResponse {
 }
 
 /*
- * Get Session
- */
-export interface GetSessionResponse extends APIResponse {
-    session: Session,
-    user: User
-}
-
-/*
  * Sign In
  */
 export interface SignInRequest extends APIRequest{
@@ -56,3 +48,12 @@ export interface SignUpResponse extends APIResponse {
  * Sign Out
  */
 export interface SignOutResponse extends APIResponse {}
+
+
+/*
+ * Get Current User
+ */
+export interface GetCurrentUserResponse extends APIResponse {
+    session: Session,
+    user: User
+}

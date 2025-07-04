@@ -1,17 +1,6 @@
-import { GetSessionResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse } from './types'
+import { GetCurrentUserResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse } from './types'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
-
-/*
- * Get Session
- */
-export async function getSession(): Promise<GetSessionResponse> {
-    const res = await fetch(`${baseUrl}/api/auth/session`, {
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    })
-    return res.json()
-}
 
 /*
  * Sign In
@@ -45,6 +34,17 @@ export async function signUp(data: SignUpRequest): Promise<SignUpResponse> {
 export async function signOut(): Promise<SignOutResponse> {
     const res = await fetch(`${baseUrl}/api/auth/signout`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+    })
+    return res.json()
+}
+
+/*
+ * Get Current User
+ */
+export async function getCurrentUser(): Promise<GetCurrentUserResponse> {
+    const res = await fetch(`${baseUrl}/api/auth/current-user`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
     })
