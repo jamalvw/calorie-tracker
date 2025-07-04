@@ -13,8 +13,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<SignUpRespons
     // TODO: input validation
     const { name, email, password, age, sex, weight, height, activityLevel, goal }: SignUpRequest = await req.json()
 
-    console.log(name, email, password, age, sex, weight, height, activityLevel, goal)
-
     if (!name || !email || !password || !age || !sex || !weight || !height || !activityLevel || !goal) {
         return NextResponse.json({ error: { code: ErrorCode.MISSING_REQUIRED_FIELDS } } as SignUpResponse, { status: 400 })
     }
