@@ -1,4 +1,4 @@
-import { GetCurrentUserResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse, UpdateUserRequest, UpdateUserResponse } from './types'
+import { GetCurrentUserResponse, NutritionixNutrientsResponse, NutritionixNutrientsRequest, NutritionixSearchRequest, NutritionixSearchResponse, SignInRequest, SignInResponse, SignOutResponse, SignUpRequest, SignUpResponse, UpdateUserRequest, UpdateUserResponse } from './types'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
@@ -13,9 +13,7 @@ export async function signIn(data: SignInRequest): Promise<SignInResponse | null
         body: JSON.stringify(data)
     })
 
-    if (!res.ok) return null
-
-    return res.json()
+    try { return await res.json() } catch { return null }
 }
 
 /*
@@ -29,9 +27,7 @@ export async function signUp(data: SignUpRequest): Promise<SignUpResponse | null
         body: JSON.stringify(data)
     })
 
-    if (!res.ok) return null
-
-    return res.json()
+    try { return await res.json() } catch { return null }
 }
 
 /*
@@ -44,9 +40,7 @@ export async function signOut(): Promise<SignOutResponse | null> {
         credentials: 'include',
     })
 
-    if (!res.ok) return null
-
-    return res.json()
+    try { return await res.json() } catch { return null }
 }
 
 /*
@@ -58,9 +52,7 @@ export async function getCurrentUser(): Promise<GetCurrentUserResponse | null> {
         credentials: 'include',
     })
 
-    if (!res.ok) return null
-
-    return res.json()
+    try { return await res.json() } catch { return null }
 }
 
 /*
@@ -74,7 +66,38 @@ export async function updateUser(data: UpdateUserRequest): Promise<UpdateUserRes
         body: JSON.stringify(data)
     })
 
-    if (!res.ok) return null
+    try { return await res.json() } catch { return null }
+}
 
-    return res.json()
+/*
+ * Search with Nutritionix
+ */
+export async function nutritionixSearch(data: NutritionixSearchRequest): Promise<NutritionixSearchResponse | null> {
+    const params = new URLSearchParams(
+        Object.fromEntries(
+            Object.entries(data).filter(([, v]) => v != null).map(([k, v]) => [k, String(v)])
+        )
+    ).toString()
+
+    const res = await fetch(`${baseUrl}/api/protected/nutritionix/search?${params}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+    })
+
+    try { return await res.json() } catch { return null }
+}
+
+/*
+ * Get Nutrients from Nutritionix
+ */
+export async function nutritionixNutrients(data: NutritionixNutrientsRequest): Promise<NutritionixNutrientsResponse | null> {
+    const res = await fetch(`${baseUrl}/api/protected/nutritionix/nutrients`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    })
+
+    try { return await res.json() } catch { return null }
 }

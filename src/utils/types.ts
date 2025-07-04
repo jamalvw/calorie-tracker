@@ -1,4 +1,5 @@
 import { Goal, ActivityLevel, Session, User, Sex } from '@/generated/prisma'
+import { NutritionixFood } from '@/lib/nutritionix/types'
 
 export enum ErrorCode {
     INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
@@ -84,4 +85,51 @@ export interface UpdateUserRequest extends APIRequest {
 
 export interface UpdateUserResponse extends APIResponse {
     user: User
+}
+
+/*
+ * Search with Nutritionix
+ */
+export interface NutritionixSearchRequest extends APIRequest {
+    query: string
+    branded?: boolean
+    common?: boolean
+    brandIds?: string[]
+    brandedType?: string
+    brandedRegion?: string
+    brandedFoodNameOnly?: boolean
+    commonGeneral?: boolean
+    commonGrocery?: boolean
+    commonRestaurant?: boolean
+    claim?: boolean
+    claimsQuery?: string
+    taxonomy?: string
+    taxonomyNodeId?: string
+}
+
+export interface NutritionixSearchResponse extends APIResponse {
+    branded?: NutritionixFood[]
+    common?: NutritionixFood[]
+}
+
+/*
+ * Get Nutrients from Nutritionix
+ */
+export interface NutritionixNutrientsRequest extends APIRequest {
+    query: string,
+    num_servings?: number,
+    aggregate?: string,
+    line_delimited?: boolean,
+    use_raw_foods?: boolean,
+    include_subrecipe?: boolean,
+    timezone?: string,
+    consumed_at?: string,
+    use_branded_foods?: boolean,
+    taxonomy?: boolean,
+    ingredient_statement?: boolean,
+    last_modified?: boolean,
+}
+
+export interface NutritionixNutrientsResponse extends APIResponse {
+    foods: NutritionixFood[]
 }
