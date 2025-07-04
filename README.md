@@ -1,6 +1,6 @@
 # Calorie Tracker App
 
-A simple calorie tracking app built with Next.js, TypeScript, and Prisma.
+A simple calorie tracking app built with Next.js, TypeScript, and Prisma (PostgreSQL).
 
 
 ## Features
