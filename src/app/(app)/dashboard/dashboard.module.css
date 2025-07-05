@@ -1,7 +1,9 @@
 .dashboardContainer {
     display: flex;
     flex-direction: column;
+    width: 100vw;
     height: 100vh;
+    box-sizing: border-box;
 }
 
 .dashboard {
@@ -9,81 +11,82 @@
     flex-direction: column;
     gap: 10px;
     padding: 20px;
-    flex: 1 1 0;
-    min-height: 0;
+    flex: 1;
+    box-sizing: border-box;
 }
 
 .dashboardContent {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1 1 0;
-    min-height: 0;
+    flex: 1;
 }
 
 .addFoodContainer {
     display: flex;
     gap: 10px;
-    flex: 1 1 0;
-    min-height: 0;
+    flex: 1;
 }
 
 .search {
     display: flex;
     flex-direction: column;
+    flex: 1;
     gap: 10px;
+    max-width: 480px;
 }
 
 .searchControls {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .searchResults {
     display: flex;
     flex-direction: column;
+    flex: 1;
     overflow-y: auto;
-    flex: 1 1 0;
-    min-height: 0;
-    min-width: 480px;
 }
 
 .searchResult {
     display: flex;
     flex-direction: column;
     padding: 10px;
+    flex-shrink: 0;
 }
 
-.modalContainer {
+.viewContainer {
     display: flex;
-    flex: 1 1 0;
-    min-height: 0;
+    flex: 1;
 }
 
-.modal {
+.view {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 10px;
-    flex: 1 1 0;
-    min-height: 0;
+    flex: 1;
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
 }
 
-.modalControls {
+.viewControls {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .addCustomFoodForm {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1 1 0;
 }
 
 .addCustomFoodFormFields {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    flex: 1 1 0;
+    flex: 1;
 }

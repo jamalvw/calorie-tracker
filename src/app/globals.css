@@ -53,6 +53,8 @@ button:hover {
 input, select {
   background-color: #111;
   padding: 10px 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 input:disabled, select:disabled {

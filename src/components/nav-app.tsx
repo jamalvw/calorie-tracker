@@ -1,12 +1,14 @@
 import Link from 'next/link'
+import { User } from '@/generated/prisma'
 
-export default function DashboardNavbar() {
+export default function NavApp({ user }: { user: User }) {
     return (
-        <div className="navbar dashboard-navbar">
+        <div className="navbar app-navbar">
             <div className="navbar-left">
                 <Link href="/dashboard"><h1>Calorie Tracker</h1></Link>
             </div>
             <div className="navbar-right">
+                <p>{user.name}</p>
                 <Link href="/account">Account</Link>
                 <Link href="/flow/signout">Sign Out</Link>
             </div>

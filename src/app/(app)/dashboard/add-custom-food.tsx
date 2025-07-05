@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { CreateCustomFoodRequest, CreateCustomFoodResponse, ErrorCode } from '@/utils/types'
 import { createCustomFood } from '@/utils/api'
 
-export default function AddCustomFood({ closeModal }: { closeModal: () => void }) {
+export default function AddCustomFood({ closeView }: { closeView: () => void }) {
     const [name, setName] = useState<string>('')
     const [brand, setBrand] = useState<string>('')
     const [servingSize, setServingSize] = useState<number>(0)
@@ -32,13 +32,17 @@ export default function AddCustomFood({ closeModal }: { closeModal: () => void }
             }
         }
 
-        closeModal()
+        closeView()
     }
 
     return (
-        <div className={`${styles.modal} ${styles.addCustomFoodModal}`}>
-            <h3>Add Food</h3>
+        <div className={`${styles.view} ${styles.addCustomFoodView}`}>
+            <div className={styles.viewHeader}>Add Food</div>
             <form onSubmit={handleSubmit} className={styles.addCustomFoodForm}>
+                <div className={styles.viewControls}>
+                    <button type='button' onClick={closeView}>Close</button>
+                    <button type='submit'>Add</button>
+                </div>
                 <div className={styles.addCustomFoodFormFields}>
                     <div className='form-group'>
                         <label htmlFor='name'>Name</label>
@@ -76,10 +80,6 @@ export default function AddCustomFood({ closeModal }: { closeModal: () => void }
                         <label htmlFor='fiber'>Fiber</label>
                         <input type='number' placeholder='Fiber' value={fiber} onChange={(e) => setFiber(Number(e.target.value))} />
                     </div>
-                </div>
-                <div className={styles.modalControls}>
-                    <button type='button' onClick={closeModal}>Close</button>
-                    <button type='submit'>Add</button>
                 </div>
                 {error && <p className='error'>{error}</p>}
             </form>

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import DashboardNavbar from '../_components/DashboardNavbar'
 import { User } from '@/generated/prisma'
 import { getCurrentUser, nutritionixNutrients, nutritionixSearch } from '@/utils/api'
 import { calculateBMR, calculateCalorieGoal, calculateTDEE } from '@/utils/utils'
@@ -22,7 +21,7 @@ export default function Dashboard() {
     const [results, setResults] = useState<NutritionixFood[]>([])
     const [focusedItem, setFocusedItem] = useState<NutritionixFood | null>(null)
 
-    const [modal, setModal] = useState<string | null>(null)
+    const [view, setView] = useState<string | null>(null)
 
     useEffect(() => {
         (async () => {
@@ -60,9 +59,7 @@ export default function Dashboard() {
         setResults([...(response?.common || []), ...(response?.branded || []), ...(response?.local || [])])
     }
 
-    const openAddFoodModal = async (food: NutritionixFood) => {
-        setModal('addFood')
-
+    const openAddFoodView = async (food: NutritionixFood) => {
         if (food.local) {
             setFocusedItem(food)
             return
@@ -81,19 +78,15 @@ export default function Dashboard() {
         }
 
         setFocusedItem(response?.foods[0])
+        setView('addFood')
     }
 
-    const openAddCustomFoodModal = () => {
-        setModal('addCustomFood')
-    }
-
-    const closeModal = () => {
-        setModal(null)
+    const closeView = () => {
+        setView(null)
     }
 
     return (
         <div className={styles.dashboardContainer}>
-            <DashboardNavbar />
             {user && <div className={styles.dashboard}>
                 <div className={styles.dashboardHeader}>
                     <h1>Hi, {user.name}!</h1>
@@ -114,13 +107,13 @@ export default function Dashboard() {
                     <div className={styles.addFoodContainer}>
                         <div className={styles.search}>
                             <form onSubmit={onSearch} className={styles.searchControls}>
-                                <input type='text' placeholder='Search for a food' onChange={(e) => setSearch(e.target.value.trim())} disabled={modal != null} />
-                                <button type='submit' disabled={modal != null || search.length < 2 || search.length > 100}>Search</button>
-                                <button type='button' onClick={openAddCustomFoodModal} disabled={modal != null}>Add Food</button>
+                                <input type='text' placeholder='Search for a food' onChange={(e) => setSearch(e.target.value.trim())} disabled={view != null} />
+                                <button type='submit' disabled={view != null || search.length < 2 || search.length > 100}>Search</button>
+                                <button type='button' onClick={() => setView('addCustomFood')} disabled={view != null}>Add Food</button>
                             </form>
                             <div className={styles.searchResults}>
                                 {results.map((food) => (
-                                    <button key={food.food_name} className={styles.searchResult} onClick={() => openAddFoodModal(food)} disabled={modal != null}>
+                                    <button key={food.food_name} className={styles.searchResult} onClick={() => openAddFoodView(food)} disabled={view != null}>
                                         <h3>{food.food_name}</h3>
                                         <p>{food.serving_qty} {food.serving_unit}</p>
                                         <p>{food.nf_calories} calories</p>
@@ -129,9 +122,9 @@ export default function Dashboard() {
                                 ))}
                             </div>
                         </div>
-                        <div className={styles.modalContainer}>
-                            {modal == 'addFood' && focusedItem && (
-                                <div className={`${styles.modal} ${styles.addFoodModal}`}>
+                        <div className={styles.viewContainer}>
+                            {view == 'addFood' && focusedItem && (
+                                <div className={`${styles.view} ${styles.addFoodView}`}>
                                     <h3>{focusedItem.food_name}</h3>
                                     {focusedItem.brand_name && <p>{focusedItem.brand_name}</p>}
                                     <p>{focusedItem.serving_qty} {focusedItem.serving_unit}</p>
@@ -140,13 +133,13 @@ export default function Dashboard() {
                                     <p>{focusedItem.nf_total_carbohydrate}g carbs</p>
                                     <p>{focusedItem.nf_dietary_fiber}g fiber</p>
                                     <p>{focusedItem.nf_protein}g protein</p>
-                                    <div className={styles.modalControls}>
-                                        <button type='button' onClick={closeModal}>Cancel</button>
+                                    <div className={styles.viewControls}>
+                                        <button type='button' onClick={closeView}>Cancel</button>
                                         <button type='button' onClick={() => console.log('add food')}>Add</button>
                                     </div>
                                 </div>
                             )}
-                            {modal == 'addCustomFood' && <AddCustomFood closeModal={closeModal} />}
+                            {view == 'addCustomFood' && <AddCustomFood closeView={closeView} />}
                         </div>
                     </div>
                 </div>

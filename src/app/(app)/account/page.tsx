@@ -3,7 +3,6 @@
 import { getCurrentUser, updateUser } from '@/utils/api'
 import { Sex, ActivityLevel, Goal, User } from '@/generated/prisma'
 import { useState, useEffect } from 'react'
-import DashboardNavbar from '../_components/DashboardNavbar'
 import { ErrorCode, UpdateUserRequest, UpdateUserResponse } from '@/utils/types'
 
 export default function Account() {
@@ -78,7 +77,6 @@ export default function Account() {
 
     return (
         <div className='account-container'>
-            <DashboardNavbar />
             {user && <div className='account'>
                 <div className='account-header'>
                     <h1>Account</h1>
