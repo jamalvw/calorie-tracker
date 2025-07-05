@@ -1,4 +1,4 @@
-import { Goal, ActivityLevel, Session, User, Sex, ServingUnit, Food } from '@/generated/prisma'
+import { Goal, ActivityLevel, Session, User, Sex, Food } from '@/generated/prisma'
 import { NutritionixFood } from '@/lib/nutritionix/types'
 
 export enum ErrorCode {
@@ -94,7 +94,7 @@ export interface CreateCustomFoodRequest extends APIRequest {
     name: string
     brand: string
     servingSize: number
-    servingUnit: ServingUnit
+    servingUnit: string
     calories: number
     protein: number
     carbs: number
