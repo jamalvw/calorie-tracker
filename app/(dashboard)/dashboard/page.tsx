@@ -47,7 +47,7 @@ export default function Dashboard() {
         (async () => {
             if (debouncedSearch.length < 3 || debouncedSearch.length > 100) return
             
-            const request: NutritionixSearchRequest = { query: debouncedSearch }
+            const request: NutritionixSearchRequest = { query: debouncedSearch.trim() }
             const response = await nutritionixSearch(request) as NutritionixSearchResponse
             
             if (!response || response.error) {
@@ -111,7 +111,7 @@ export default function Dashboard() {
                     <div className={styles.addFoodContainer}>
                         <div className={styles.search}>
                             <form className={styles.searchControls}>
-                                <input type='text' placeholder='Search for a food' value={search} onChange={(e) => setSearch(e.target.value.trim())} disabled={view != null} />
+                                <input type='text' placeholder='Search for a food' value={search} onChange={(e) => setSearch(e.target.value)} disabled={view != null} />
                                 <button type='button' onClick={() => setView('addCustomFood')} disabled={view != null}>Add Food</button>
                             </form>
                             <div className={styles.searchResults}>
