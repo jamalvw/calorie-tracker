@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { User } from '@/generated/prisma'
 import { getCurrentUser, nutritionixNutrients, nutritionixSearch } from '@/utils/api'
-import { calculateBMR, calculateCalorieGoal, calculateTDEE } from '@/utils/utils'
+import { calculateBMR, calculateCalorieGoal, calculateTDEE, useDebounce } from '@/utils/utils'
 import { ErrorCode, NutritionixNutrientsRequest, NutritionixNutrientsResponse, NutritionixSearchRequest, NutritionixSearchResponse } from '@/utils/types'
 import { NutritionixFood } from '@/lib/nutritionix/types'
 import styles from './dashboard.module.css'
@@ -16,12 +16,13 @@ export default function Dashboard() {
     const [tdee, setTDEE] = useState<number>(0)
     const [calorieGoal, setCalorieGoal] = useState<number>(0)
 
-    const [lastSearch, setLastSearch] = useState<string>('')
     const [search, setSearch] = useState<string>('')
     const [results, setResults] = useState<NutritionixFood[]>([])
     const [focusedItem, setFocusedItem] = useState<NutritionixFood | null>(null)
 
     const [view, setView] = useState<string | null>(null)
+
+    const debouncedSearch = useDebounce(search, 500)
 
     useEffect(() => {
         (async () => {
@@ -37,27 +38,25 @@ export default function Dashboard() {
         })()
     }, [bmr, tdee, calorieGoal])
 
-    const onSearch = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
-        if (search == lastSearch || search.length < 2 || search.length > 100) return
-
-        setLastSearch(search)
-
-        const request: NutritionixSearchRequest = { query: search,  }
-        const response = await nutritionixSearch(request) as NutritionixSearchResponse
-
-        if (!response || response.error) {
-            switch (response?.error?.code) {
-            case ErrorCode.MISSING_REQUIRED_FIELDS:
-                console.log('Missing required fields')
-            default:
-                console.log('There was an error searching for a food. Please contact support.')
+    useEffect(() => {
+        (async () => {
+            if (debouncedSearch.length < 3 || debouncedSearch.length > 100) return
+            
+            const request: NutritionixSearchRequest = { query: debouncedSearch }
+            const response = await nutritionixSearch(request) as NutritionixSearchResponse
+            
+            if (!response || response.error) {
+                switch (response?.error?.code) {
+                case ErrorCode.MISSING_REQUIRED_FIELDS:
+                    console.log('Missing required fields')
+                default:
+                    console.log('There was an error searching for a food. Please contact support.')
+                }
             }
-        }
-
-        setResults([...(response?.common || []), ...(response?.branded || []), ...(response?.local || [])])
-    }
+            
+            setResults([...(response?.common || []), ...(response?.branded || []), ...(response?.local || [])])
+        })()
+    }, [debouncedSearch])
 
     const openAddFoodView = async (food: NutritionixFood) => {
         if (food.local) {
@@ -106,9 +105,8 @@ export default function Dashboard() {
                 <div className={styles.dashboardContent}>
                     <div className={styles.addFoodContainer}>
                         <div className={styles.search}>
-                            <form onSubmit={onSearch} className={styles.searchControls}>
-                                <input type='text' placeholder='Search for a food' onChange={(e) => setSearch(e.target.value.trim())} disabled={view != null} />
-                                <button type='submit' disabled={view != null || search.length < 2 || search.length > 100}>Search</button>
+                            <form className={styles.searchControls}>
+                                <input type='text' placeholder='Search for a food' value={search} onChange={(e) => setSearch(e.target.value.trim())} disabled={view != null} />
                                 <button type='button' onClick={() => setView('addCustomFood')} disabled={view != null}>Add Food</button>
                             </form>
                             <div className={styles.searchResults}>

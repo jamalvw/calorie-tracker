@@ -1,4 +1,5 @@
 import { ActivityLevel, Goal, Sex } from '@/generated/prisma'
+import { useEffect, useState } from 'react'
 
 // Mifflin-St Jeor Equation
 export const calculateBMR = (sex: Sex, weight: number, height: number, age: number) => {
@@ -39,4 +40,15 @@ export const calculateCalorieGoal = (tdee: number, goal: Goal): number => {
     default:
         throw new Error('Invalid goal')
     }
+}
+
+export const useDebounce = <T>(value: T, delay: number): T => {
+    const [debounced, setDebounced] = useState(value)
+
+    useEffect(() => {
+        const timer = setTimeout(() => setDebounced(value), delay)
+        return () => clearTimeout(timer)
+    }, [value, delay])
+
+    return debounced
 }
