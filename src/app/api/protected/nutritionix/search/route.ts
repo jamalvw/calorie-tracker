@@ -1,6 +1,7 @@
 import { NutritionixFood } from '@/lib/nutritionix/types'
 import prisma from '@/lib/prisma'
 import { NutritionixSearchResponse, ErrorCode } from '@/utils/types'
+import { uniqueByField } from '@/utils/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
 const apiUrl = 'https://trackapi.nutritionix.com/v2/search/instant'
@@ -32,8 +33,9 @@ export async function GET(req: NextRequest): Promise<NextResponse<NutritionixSea
     })
 
     const data = await res.json()
+    const dataFiltered = { common: uniqueByField(data.common, 'tag_id'), branded: uniqueByField(data.branded, 'tag_id'), local: [] as NutritionixFood[] }
 
-    data.local = await prisma.food.findMany({ where: { name: { contains: query, mode: 'insensitive' } } })
+    dataFiltered.local = await prisma.food.findMany({ where: { name: { contains: query, mode: 'insensitive' } } })
         .then(foods => foods.map(food => ({
             food_name: food.name,
             brand_name: food.brand,
@@ -47,5 +49,5 @@ export async function GET(req: NextRequest): Promise<NextResponse<NutritionixSea
             local: true,
         }) as NutritionixFood))
 
-    return NextResponse.json(data as NutritionixSearchResponse)
+    return NextResponse.json(dataFiltered as NutritionixSearchResponse)
 }

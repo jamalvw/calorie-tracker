@@ -1,5 +1,4 @@
 import { ActivityLevel, Goal, Sex } from '@/generated/prisma'
-import { useEffect, useState } from 'react'
 
 // Mifflin-St Jeor Equation
 export const calculateBMR = (sex: Sex, weight: number, height: number, age: number) => {
@@ -42,13 +41,12 @@ export const calculateCalorieGoal = (tdee: number, goal: Goal): number => {
     }
 }
 
-export const useDebounce = <T>(value: T, delay: number): T => {
-    const [debounced, setDebounced] = useState(value)
+export const uniqueByField = <T>(array: T[], field: keyof T) => {
+    const map = new Map()
 
-    useEffect(() => {
-        const timer = setTimeout(() => setDebounced(value), delay)
-        return () => clearTimeout(timer)
-    }, [value, delay])
+    for (const item of array) {
+        map.set(item[field], item)
+    }
 
-    return debounced
+    return Array.from(map.values())
 }
