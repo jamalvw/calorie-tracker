@@ -1,6 +1,6 @@
 'use client'
-import { signIn } from '../../../utils/api'
-import { ErrorCode, SignInRequest, SignInResponse } from '../../../utils/types'
+import { signIn } from '@/utils/api'
+import { ErrorCode, SignInRequest, SignInResponse } from '@/utils/types'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'

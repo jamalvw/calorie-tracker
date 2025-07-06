@@ -1,12 +1,13 @@
 'use client'
 
-import { getCurrentUser, updateUser } from '@/utils/api'
-import { Sex, ActivityLevel, Goal, User } from '@/generated/prisma'
+import { updateUser } from '@/utils/api'
+import { Sex, ActivityLevel, Goal } from '@/generated/prisma'
 import { useState, useEffect } from 'react'
 import { ErrorCode, UpdateUserRequest, UpdateUserResponse } from '@/utils/types'
+import { useUser } from '@/providers/user-provider'
 
 export default function Account() {
-    const [user, setUser] = useState<User | null>(null)
+    const user = useUser()
 
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
@@ -23,28 +24,22 @@ export default function Account() {
 
     useEffect(() => {
         (async () => {
-            const response = await getCurrentUser()
-
-            if (!response) return
-
-            setUser(response.user)
-
-            setName(response.user.name!)
-            setEmail(response.user.email!)
-            setAge(response.user.age!)
-            setSex(response.user.sex!)
-            setWeight(response.user.weight!)
-            setHeight(response.user.height!)
-            setActivityLevel(response.user.activityLevel!)
-            setGoal(response.user.goal!)
+            setName(user.name!)
+            setEmail(user.email!)
+            setAge(user.age!)
+            setSex(user.sex!)
+            setWeight(user.weight!)
+            setHeight(user.height!)
+            setActivityLevel(user.activityLevel!)
+            setGoal(user.goal!)
         })()
-    }, [])
+    }, [user])
 
     const saveChanges = async () => {
         setIsSaving(true)
 
         const request: UpdateUserRequest = {
-            id: user!.id.toString(),
+            id: user.id.toString(),
             name,
             email,
             age,
@@ -70,7 +65,6 @@ export default function Account() {
             }
         }
 
-        setUser(response.user)
         setIsEditing(false)
         setError('')
     }

@@ -59,7 +59,7 @@ export async function getCurrentUser(): Promise<GetCurrentUserResponse | null> {
  * Update User
  */
 export async function updateUser(data: UpdateUserRequest): Promise<UpdateUserResponse | null> {
-    const res = await fetch(`${baseUrl}/api/protected/users`, {
+    const res = await fetch(`${baseUrl}/api/users`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -73,7 +73,7 @@ export async function updateUser(data: UpdateUserRequest): Promise<UpdateUserRes
  * Create Custom Food
  */
 export async function createCustomFood(data: CreateCustomFoodRequest): Promise<CreateCustomFoodResponse | null> {
-    const res = await fetch(`${baseUrl}/api/protected/foods`, {
+    const res = await fetch(`${baseUrl}/api/foods`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -93,7 +93,7 @@ export async function nutritionixSearch(data: NutritionixSearchRequest): Promise
         )
     ).toString()
 
-    const res = await fetch(`${baseUrl}/api/protected/nutritionix/search?${params}`, {
+    const res = await fetch(`${baseUrl}/api/nutritionix/search?${params}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -106,7 +106,7 @@ export async function nutritionixSearch(data: NutritionixSearchRequest): Promise
  * Get Nutrients from Nutritionix
  */
 export async function nutritionixNutrients(data: NutritionixNutrientsRequest): Promise<NutritionixNutrientsResponse | null> {
-    const res = await fetch(`${baseUrl}/api/protected/nutritionix/nutrients`, {
+    const res = await fetch(`${baseUrl}/api/nutritionix/nutrients`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

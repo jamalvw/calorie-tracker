@@ -1,5 +1,4 @@
-
-import styles from './dashboard.module.css'
+import styles from '@/app/(dashboard)/dashboard/dashboard.module.css'
 import { useState } from 'react'
 import { CreateCustomFoodRequest, CreateCustomFoodResponse, ErrorCode } from '@/utils/types'
 import { createCustomFood } from '@/utils/api'

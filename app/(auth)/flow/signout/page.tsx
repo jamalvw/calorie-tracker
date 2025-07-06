@@ -1,6 +1,6 @@
 'use client'
 
-import { signOut } from '../../../utils/api'
+import { signOut } from '@/utils/api'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 

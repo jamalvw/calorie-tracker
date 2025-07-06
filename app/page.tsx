@@ -1,4 +1,4 @@
-import NavLanding from '@/components/nav-landing'
+import NavLanding from '@/components/navigation/nav-landing'
 import styles from './root.module.css'
 
 export default function Root() {

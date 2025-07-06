@@ -1,6 +1,7 @@
-import NavApp from '@/components/nav-app'
+import NavApp from '@/components/navigation/nav-app'
 import prisma from '@/lib/prisma'
 import { cookies } from 'next/headers'
+import { UserProvider } from '@/providers/user-provider'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
     const sessionId = (await cookies()).get('session')?.value
@@ -11,9 +12,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     const user = session?.user
 
     return (
-        <div>
-            <NavApp user={user!} />
-            {children}
-        </div>
+        <UserProvider user={user!}>
+            <div>
+                <NavApp user={user!} />
+                {children}
+            </div>
+        </UserProvider>
     )
 }

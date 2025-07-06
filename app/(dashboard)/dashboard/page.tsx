@@ -1,16 +1,27 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { User } from '@/generated/prisma'
-import { getCurrentUser, nutritionixNutrients, nutritionixSearch } from '@/utils/api'
-import { calculateBMR, calculateCalorieGoal, calculateTDEE, useDebounce } from '@/utils/utils'
+import { nutritionixNutrients, nutritionixSearch } from '@/utils/api'
+import { calculateBMR, calculateCalorieGoal, calculateTDEE } from '@/utils/utils'
 import { ErrorCode, NutritionixNutrientsRequest, NutritionixNutrientsResponse, NutritionixSearchRequest, NutritionixSearchResponse } from '@/utils/types'
 import { NutritionixFood } from '@/lib/nutritionix/types'
 import styles from './dashboard.module.css'
-import AddCustomFood from './add-custom-food'
+import AddCustomFood from '@/components/dashboard/add-custom-food'
+import { useUser } from '@/providers/user-provider'
+
+const useDebounce = <T,>(value: T, delay: number): T => {
+    const [debouncedValue, setDebouncedValue] = useState(value)
+
+    useEffect(() => {
+        const timer = setTimeout(() => setDebouncedValue(value), delay)
+        return () => clearTimeout(timer)
+    }, [value, delay])
+
+    return debouncedValue
+}
 
 export default function Dashboard() {
-    const [user, setUser] = useState<User | null>(null)
+    const user = useUser()
     
     const [bmr, setBMR] = useState<number>(0)
     const [tdee, setTDEE] = useState<number>(0)
@@ -26,17 +37,11 @@ export default function Dashboard() {
 
     useEffect(() => {
         (async () => {
-            const response = await getCurrentUser()
-
-            if (!response) return
-
-            setUser(response.user)
-
-            setBMR(calculateBMR(response.user.sex!, response.user.weight!, response.user.height!, response.user.age!))
-            setTDEE(calculateTDEE(bmr, response.user.activityLevel!))
-            setCalorieGoal(calculateCalorieGoal(tdee, response.user.goal!))
+            setBMR(calculateBMR(user.sex!, user.weight!, user.height!, user.age!))
+            setTDEE(calculateTDEE(bmr, user.activityLevel!))
+            setCalorieGoal(calculateCalorieGoal(tdee, user.goal!))
         })()
-    }, [bmr, tdee, calorieGoal])
+    }, [bmr, tdee, calorieGoal, user])
 
     useEffect(() => {
         (async () => {
