@@ -177,7 +177,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/jamal/Documents/Repos/calorie-tracker/generated/prisma",
+      "value": "/Users/jamal/Documents/Repos/calorie-tracker/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -195,10 +195,10 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": "../../../.env",
+    "schemaEnvPath": "../../../.env"
   },
-  "relativePath": "../../prisma",
+  "relativePath": "../../../prisma",
   "clientVersion": "6.10.1",
   "engineVersion": "9b628578b3b7cae625e8c927178f15a170e74a9c",
   "datasourceNames": [
@@ -214,8 +214,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id Int @id @unique @default(autoincrement())\n\n  name           String\n  email          String @unique\n  hashedPassword String\n\n  age           Int?\n  sex           Sex?\n  weight        Float?\n  height        Float?\n  activityLevel ActivityLevel?\n  goal          Goal?\n\n  sessions Session[]\n\n  createdAt DateTime @default(now())\n}\n\nenum Sex {\n  MALE\n  FEMALE\n}\n\nenum ActivityLevel {\n  SEDENTARY\n  LIGHT\n  MODERATE\n  HIGH\n}\n\nenum Goal {\n  GAIN_MUSCLE\n  MAINTAIN_WEIGHT\n  LOSE_WEIGHT\n  OTHER\n}\n\nmodel Session {\n  id        String   @id @unique @default(uuid())\n  user      User     @relation(fields: [userId], references: [id])\n  userId    Int\n  createdAt DateTime @default(now())\n  expiresAt DateTime\n}\n\nmodel Food {\n  id          String   @id @unique @default(uuid())\n  name        String\n  brand       String?\n  servingSize Float?\n  servingUnit String?\n  calories    Float?\n  protein     Float?\n  carbs       Float?\n  fat         Float?\n  fiber       Float?\n  createdAt   DateTime @default(now())\n}\n",
-  "inlineSchemaHash": "5541de5e6f203792391a09bfa006080ad5350639cc4d55be23b28a7c9c3b8102",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id Int @id @unique @default(autoincrement())\n\n  name           String\n  email          String @unique\n  hashedPassword String\n\n  age           Int?\n  sex           Sex?\n  weight        Float?\n  height        Float?\n  activityLevel ActivityLevel?\n  goal          Goal?\n\n  sessions Session[]\n\n  createdAt DateTime @default(now())\n}\n\nenum Sex {\n  MALE\n  FEMALE\n}\n\nenum ActivityLevel {\n  SEDENTARY\n  LIGHT\n  MODERATE\n  HIGH\n}\n\nenum Goal {\n  GAIN_MUSCLE\n  MAINTAIN_WEIGHT\n  LOSE_WEIGHT\n  OTHER\n}\n\nmodel Session {\n  id        String   @id @unique @default(uuid())\n  user      User     @relation(fields: [userId], references: [id])\n  userId    Int\n  createdAt DateTime @default(now())\n  expiresAt DateTime\n}\n\nmodel Food {\n  id          String   @id @unique @default(uuid())\n  name        String\n  brand       String?\n  servingSize Float?\n  servingUnit String?\n  calories    Float?\n  protein     Float?\n  carbs       Float?\n  fat         Float?\n  fiber       Float?\n  createdAt   DateTime @default(now())\n}\n",
+  "inlineSchemaHash": "0ebf8c1befac8938eeb3892800fed087c4fe474d8a8a9b48f75c334ac18950de",
   "copyEngine": true
 }
 
@@ -224,8 +224,8 @@ const fs = require('fs')
 config.dirname = __dirname
 if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   const alternativePaths = [
+    "src/generated/prisma",
     "generated/prisma",
-    "prisma",
   ]
   
   const alternativePath = alternativePaths.find((altPath) => {
@@ -255,7 +255,7 @@ Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
-path.join(process.cwd(), "generated/prisma/libquery_engine-darwin-arm64.dylib.node")
+path.join(process.cwd(), "src/generated/prisma/libquery_engine-darwin-arm64.dylib.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "generated/prisma/schema.prisma")
+path.join(process.cwd(), "src/generated/prisma/schema.prisma")
