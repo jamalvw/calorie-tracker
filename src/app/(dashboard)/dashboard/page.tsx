@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { calculateBMR, calculateCalorieGoal, calculateTDEE } from '@/utils/utils'
 import styles from './dashboard.module.css'
 import { useUser } from '@/providers/user-provider'
-import { BookOpenTextIcon, PenIcon, PlusIcon } from 'lucide-react'
+import { BookOpenTextIcon, EditIcon, PenIcon, PlusIcon } from 'lucide-react'
 
 function setProgress(element: SVGSVGElement, value: number) {
     const progress = element.querySelector(`.${styles.progress}`) as SVGCircleElement
@@ -125,7 +125,14 @@ export default function Dashboard() {
                 <div className={styles.dashboardContent}>
                     <div className={`${styles.dashboardItem} ${styles.half}`} data-type='calories'>
                         <div className={styles.dashboardItemHeader}>
-                            <div className={styles.dashboardItemTitle}>Calories</div>
+                            <div className={styles.dashboardItemTitle}>
+                                <div className={styles.dashboardItemTitleText}>Calories</div>
+                                <div className={styles.dashboardItemControls}>
+                                    <button className={styles.dashboardItemControl}>
+                                        <PenIcon className={styles.dashboardControlIcon} />
+                                    </button>
+                                </div>
+                            </div>
                             <div className={styles.dashboardItemDescription}>Remaining = Goal - Food + Exercise</div>
                         </div>
                         <div className={styles.dashboardItemContent}>
@@ -159,7 +166,14 @@ export default function Dashboard() {
                     </div>
                     <div className={`${styles.dashboardItem} ${styles.half}`} data-type='macros'>
                         <div className={styles.dashboardItemHeader}>
-                            <div className={styles.dashboardItemTitle}>Macros</div>
+                            <div className={styles.dashboardItemTitle}>
+                                <div className={styles.dashboardItemTitleText}>Macros</div>
+                                <div className={styles.dashboardItemControls}>
+                                    <button className={styles.dashboardItemControl}>
+                                        <PenIcon className={styles.dashboardControlIcon} />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div className={styles.dashboardItemContent}>
                             <div className={styles.macrosContainer}>
@@ -297,7 +311,7 @@ export default function Dashboard() {
                                 <div className={styles.dashboardItemTitleText}>Diary</div>
                                 <div className={styles.dashboardItemControls}>
                                     <button className={styles.dashboardItemControl}>
-                                        <PenIcon className={styles.dashboardControlIcon} />
+                                        <EditIcon className={styles.dashboardControlIcon} />
                                     </button>
                                 </div>
                             </div>
