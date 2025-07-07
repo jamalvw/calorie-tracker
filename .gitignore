@@ -15,7 +15,7 @@ npm-debug.log
 next-env.d.ts
 
 # auto-generated code
-/generated
+/src/generated
 
 # misc
 .DS_Store
