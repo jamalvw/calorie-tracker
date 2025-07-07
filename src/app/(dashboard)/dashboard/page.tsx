@@ -8,17 +8,7 @@ import { NutritionixFood } from '@/lib/nutritionix/types'
 import styles from './dashboard.module.css'
 import AddCustomFood from '@/components/dashboard/add-custom-food'
 import { useUser } from '@/providers/user-provider'
-
-const useDebounce = <T,>(value: T, delay: number): T => {
-    const [debouncedValue, setDebouncedValue] = useState(value)
-
-    useEffect(() => {
-        const timer = setTimeout(() => setDebouncedValue(value), delay)
-        return () => clearTimeout(timer)
-    }, [value, delay])
-
-    return debouncedValue
-}
+import { useDebounce } from '@/hooks/use-debounce'
 
 export default function Dashboard() {
     const user = useUser()
@@ -91,7 +81,7 @@ export default function Dashboard() {
 
     return (
         <div className={styles.dashboardContainer}>
-            {user && <div className={styles.dashboard}>
+            <div className={styles.dashboard}>
                 <div className={styles.dashboardHeader}>
                     <h1>Hi, {user.name}!</h1>
                     <p>Email: {user.email}</p>
@@ -146,7 +136,7 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-            </div>}
+            </div>
         </div>
     )
 }

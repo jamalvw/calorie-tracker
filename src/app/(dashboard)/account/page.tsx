@@ -1,131 +1,176 @@
 'use client'
 
 import { updateUser } from '@/utils/api'
-import { Sex, ActivityLevel, Goal } from '@/generated/prisma'
-import { useState, useEffect } from 'react'
-import { ErrorCode, UpdateUserRequest, UpdateUserResponse } from '@/utils/types'
+import { Sex, ActivityLevel, Goal, User } from '@/generated/prisma'
+import { useState } from 'react'
+import { UpdateUserRequest, UpdateUserResponse } from '@/utils/types'
 import { useUser } from '@/providers/user-provider'
+import styles from './account.module.css'
+
+type FormField = {
+    label: string
+    type: string
+    value: string | number | null
+    options?: FormFieldOption[]
+    error?: string
+}
+
+type FormFieldOption = {
+    label: string
+    value: string | number
+}
+
+function removeErrors(formFields: Record<string, FormField>) {
+    const newFormFields = { ...formFields }
+    for (const field in newFormFields) {
+        newFormFields[field].error = ''
+    }
+    return newFormFields
+}
+
+function setErrors(formFields: Record<string, FormField>, errors: Record<string, string>) {
+    const newFormFields = { ...formFields }
+    for (const field in errors) {
+        newFormFields[field].error = errors[field]
+    }
+    return newFormFields
+}
+
+function setValue(formFields: Record<string, FormField>, key: string, value: string | number | null) {
+    const newFormFields = { ...formFields }
+    newFormFields[key].value = value
+    return newFormFields
+}
 
 export default function Account() {
     const user = useUser()
 
+    // States
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
 
-    const [name, setName] = useState<string>('')
-    const [email, setEmail] = useState<string>('')
-    const [age, setAge] = useState<number>(0)
-    const [sex, setSex] = useState<Sex>(Sex.MALE)
-    const [weight, setWeight] = useState<number>(0)
-    const [height, setHeight] = useState<number>(0)
-    const [activityLevel, setActivityLevel] = useState<ActivityLevel>(ActivityLevel.SEDENTARY)
-    const [goal, setGoal] = useState<Goal>(Goal.GAIN_MUSCLE)
-    const [error, setError] = useState<string>('')
-
-    useEffect(() => {
-        (async () => {
-            setName(user.name!)
-            setEmail(user.email!)
-            setAge(user.age!)
-            setSex(user.sex!)
-            setWeight(user.weight!)
-            setHeight(user.height!)
-            setActivityLevel(user.activityLevel!)
-            setGoal(user.goal!)
-        })()
-    }, [user])
+    const [formFields, setFormFields] = useState<Record<string, FormField>>({
+        name: {
+            label: 'Name',
+            type: 'text',
+            value: user.name,
+        },
+        email: {
+            label: 'Email',
+            type: 'email',
+            value: user.email,
+        },
+        age: {
+            label: 'Age',
+            type: 'number',
+            value: user.age,
+        },
+        sex: {
+            label: 'Sex',
+            type: 'select',
+            value: user.sex,
+            options: [
+                { label: 'Male', value: Sex.MALE },
+                { label: 'Female', value: Sex.FEMALE },
+            ],
+        },
+        weight: {
+            label: 'Weight',
+            type: 'number',
+            value: user.weight,
+        },
+        height: {
+            label: 'Height',
+            type: 'number',
+            value: user.height,
+        },
+        activityLevel: {
+            label: 'Activity Level',
+            type: 'select',
+            value: user.activityLevel,
+            options: [
+                { label: 'Sedentary', value: ActivityLevel.SEDENTARY },
+                { label: 'Light', value: ActivityLevel.LIGHT },
+                { label: 'Moderate', value: ActivityLevel.MODERATE },
+                { label: 'High', value: ActivityLevel.HIGH },
+            ],
+        },
+        goal: {
+            label: 'Goal',
+            type: 'select',
+            value: user.goal,
+            options: [
+                { label: 'Gain Muscle', value: Goal.GAIN_MUSCLE },
+                { label: 'Lose Weight', value: Goal.LOSE_WEIGHT },
+                { label: 'Maintain Weight', value: Goal.MAINTAIN_WEIGHT },
+            ],
+        },
+    })
+    const [generalError, setGeneralError] = useState<string>('')
 
     const saveChanges = async () => {
         setIsSaving(true)
 
-        const request: UpdateUserRequest = {
-            id: user.id.toString(),
-            name,
-            email,
-            age,
-            sex,
-            weight,
-            height,
-            activityLevel,
-            goal,
+        const request: UpdateUserRequest = { id: user.id, data: Object.fromEntries(Object.entries(formFields)
+            .filter(([, field]) => field.value !== null)
+            .map(([key, field]) => [key, field.value])
+        ) as Partial<User> }
+
+        if (Object.keys(request.data).length === 0) {
+            return setIsSaving(false)
         }
 
         const response = await updateUser(request) as UpdateUserResponse
 
         setIsSaving(false)
 
-        if (!response || response.error) {     
-            switch (response?.error?.code) {
-            case ErrorCode.MISSING_REQUIRED_FIELDS:
-                return setError('Please fill in all fields')
-            case ErrorCode.EMAIL_IN_USE:
-                return setError('Email is already in use')
-            default:
-                return setError('There was an error saving changes. Please contact support.')
+        if (!response || response.error) {
+            if (response.error && response.error.fields) {
+                return setFormFields(setErrors(formFields, response.error.fields))
             }
+            return setGeneralError('There was an error saving changes. Please contact support.')
         }
 
+        setFormFields(removeErrors(formFields))
         setIsEditing(false)
-        setError('')
+        setGeneralError('')
     }
 
     return (
-        <div className='account-container'>
-            {user && <div className='account'>
-                <div className='account-header'>
+        <div className={styles.accountContainer}>
+            <div className={styles.account}>
+                <div className={styles.accountHeader}>
                     <h1>Account</h1>
-                    <button onClick={() => setIsEditing(true)} disabled={isEditing || isSaving}>Edit</button>
-                    {isEditing && <button onClick={() => saveChanges()} disabled={isSaving}>Save</button>}
-                    <div className='account-edit'>
-                        {/* TODO: dynamically generate form groups */}
-                        <div className='form-group'>
-                            <label htmlFor="name">Name</label>
-                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required disabled={!isEditing}/>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="email">Email</label>
-                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={!isEditing}/>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="age">Age</label>
-                            <input type="number" value={age} onChange={(e) => setAge(Number(e.target.value))} required disabled={!isEditing}/>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="sex">Sex</label>
-                            <select value={sex} onChange={(e) => setSex(e.target.value as Sex)} required disabled={!isEditing}>
-                                <option value={Sex.MALE}>Male</option>
-                                <option value={Sex.FEMALE}>Female</option>
-                            </select>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="weight">Weight</label>
-                            <input type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} required disabled={!isEditing}/>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="height">Height</label>
-                            <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} required disabled={!isEditing}/>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="activityLevel">Activity Level</label>
-                            <select value={activityLevel} onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)} required disabled={!isEditing}>
-                                <option value={ActivityLevel.SEDENTARY}>Sedentary</option>
-                                <option value={ActivityLevel.LIGHT}>Light</option>
-                                <option value={ActivityLevel.MODERATE}>Moderate</option>
-                                <option value={ActivityLevel.HIGH}>High</option>
-                            </select>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="goal">Goal</label>
-                            <select value={goal} onChange={(e) => setGoal(e.target.value as Goal)} required disabled={!isEditing}>
-                                <option value={Goal.GAIN_MUSCLE}>Gain Muscle</option>
-                                <option value={Goal.LOSE_WEIGHT}>Lose Weight</option>
-                                <option value={Goal.MAINTAIN_WEIGHT}>Maintain Weight</option>
-                            </select>
-                        </div>
-                        {error && <p className="error">{error}</p>}
-                    </div>
                 </div>
-            </div>}
+                <div className={styles.accountContent}>
+                    <form className={styles.editAccountForm} onSubmit={() => saveChanges()}>
+                        <div className={styles.editAccountFormControls}>
+                            <button onClick={() => setIsEditing(true)} disabled={isEditing || isSaving}>Edit</button>
+                            {isEditing && <button onClick={() => saveChanges()} disabled={isSaving}>Save</button>}
+                        </div>
+                        <div className={styles.editAccountFormFields}>
+                            {Object.entries(formFields).map(([key, field]) => (
+                                <div className={styles.editAccountFormField} key={key}>
+                                    <label htmlFor={key}>{field.label}</label>
+                                    {field.type === 'select' ? (
+                                        <select id={key} value={field.value || ''} onChange={(e) => setFormFields(setValue(formFields, key, e.target.value))} disabled={!isEditing || isSaving}>
+                                            {field.options?.map((option) => (
+                                                <option key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input type={field.type} id={key} value={field.value || ''} onChange={(e) => setFormFields(setValue(formFields, key, e.target.value))} disabled={!isEditing || isSaving} />
+                                    )}
+                                    {field.error && <p className="error">{field.error}</p>}
+                                </div>
+                            ))}
+                        </div>
+                        {generalError && <p className="error">{generalError}</p>}
+                    </form>
+                </div>
+            </div>
         </div>
     )
 }

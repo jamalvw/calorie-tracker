@@ -17,6 +17,7 @@ export interface APIResponse {
     error?: {
         code: ErrorCode
         message?: string
+        fields?: Record<string, string>
     },
     success?: boolean
 }
@@ -68,21 +69,22 @@ export interface GetCurrentUserResponse extends APIResponse {
     user: User
 }
 
-/*
- * Update User
+/**
+ * Update User Request
+ *
+ * @param id The id of the user to update
+ * @param data The data to update
  */
 export interface UpdateUserRequest extends APIRequest {
-    id: string
-    name?: string
-    email?: string
-    age?: number
-    sex?: Sex
-    weight?: number
-    height?: number
-    activityLevel?: ActivityLevel
-    goal?: Goal
+    id: number
+    data: Partial<User>
 }
 
+/**
+ * Update User Response
+ *
+ * @param user The updated user
+ */
 export interface UpdateUserResponse extends APIResponse {
     user: User
 }
